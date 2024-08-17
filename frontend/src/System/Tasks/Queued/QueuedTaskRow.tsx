@@ -11,6 +11,7 @@ import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons, kinds } from 'Helpers/Props';
 import { cancelCommand } from 'Store/Actions/commandActions';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useDateTimeFormat } from 'Utilities/Date';
 import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
@@ -119,6 +120,15 @@ export default function QueuedTaskRow(props: QueuedTaskRowProps) {
   const { longDateFormat, shortDateFormat, showRelativeDates, timeFormat } =
     useSelector(createUISettingsSelector());
 
+  const formatter = useDateTimeFormat({
+    weekday: 'long',
+    month: 'long',
+    year: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+
   const updateTimeTimeoutId = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
@@ -172,6 +182,8 @@ export default function QueuedTaskRow(props: QueuedTaskRowProps) {
     triggerIcon = icons.SCHEDULED;
   }
 
+  // console.log(started, longDateFormat, timeFormat);
+
   return (
     <TableRow>
       <TableRowCell className={styles.trigger}>
@@ -190,7 +202,7 @@ export default function QueuedTaskRow(props: QueuedTaskRowProps) {
 
       <TableRowCell
         className={styles.queued}
-        title={formatDateTime(queued, longDateFormat, timeFormat)}
+        title={started && formatter.format(new Date(started))}
       >
         {queuedAt}
       </TableRowCell>

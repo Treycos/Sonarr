@@ -25,6 +25,12 @@ function getRelativeDay(date, includeRelativeDate) {
   return '';
 }
 
+// FormatDateTime
+// "{formattedDate} {formattedTime}"
+
+// FormatDateTimeRelative
+// "{relativeDay}, {formattedDate} {formattedTime}"
+
 function formatDateTime(date, dateFormat, timeFormat, { includeSeconds = false, includeRelativeDay = false } = {}) {
   if (!date) {
     return '';
@@ -33,6 +39,9 @@ function formatDateTime(date, dateFormat, timeFormat, { includeSeconds = false, 
   const relativeDay = getRelativeDay(date, includeRelativeDay);
   const formattedDate = moment(date).format(dateFormat);
   const formattedTime = formatTime(date, timeFormat, { includeMinuteZero: true, includeSeconds });
+
+  // console.log(dateFormat, timeFormat);
+  // console.log(formattedDate, formattedTime);
 
   if (relativeDay) {
     return translate('FormatDateTimeRelative', { relativeDay, formattedDate, formattedTime });
